@@ -234,3 +234,189 @@ class QuoridorGame:
         self.state = original_state
         
         return p1_has_path and p2_has_path
+
+    def _walls_overlap(self, wall1: Wall, wall2: Wall) -> bool:
+        """Check if two walls overlap or cross"""
+        # Same position and orientation
+        if wall1.row == wall2.row and wall1.col == wall2.col:
+            return True
+        
+        # Same orientation - check if they overlap
+        if wall1.orientation == wall2.orientation:
+            if wall1.orientation == WallOrientation.HORIZONTAL:
+                if wall1.row == wall2.row:
+                    return abs(wall1.col - wall2.col) <= 1
+            else:
+                if wall1.col == wall2.col:
+                    return abs(wall1.row - wall2.row) <= 1
+        else:
+            # Different orientation - check if they cross
+            if wall1.orientation == WallOrientation.HORIZONTAL:
+                h_wall, v_wall = wall1, wall2
+            else:
+                h_wall, v_wall = wall2, wall1
+            
+            # Check if they cross at the center
+            if h_wall.row == v_wall.row and h_wall.col == v_wall.col:
+                return True
+        
+        return False
+    
+    def _has_path_to_goal(self, start: Tuple[int, int], player: Player) -> bool:
+        """Check if there's a path from start to the goal row using BFS"""
+        goal_row = 0 if player == Player.PLAYER1 else self.state.board_size - 1
+        
+        visited = set()
+        queue = deque([start])
+        visited.add(start)
+        
+        while queue:
+            current = queue.popleft()
+            row, col = current
+            
+            if row == goal_row:
+                return True
+            
+            # Check all four directions
+            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                new_row, new_col = row + dr, col + dc
+                
+                if not self.is_valid_position(new_row, new_col):
+                    continue
+                
+                if (new_row, new_col) in visited:
+                    continue
+                
+                if self.is_wall_between(current, (new_row, new_col)):
+                    continue
+                
+                visited.add((new_row, new_col))
+                queue.append((new_row, new_col))
+        
+        return False
+    
+    def get_shortest_path_length(self, start: Tuple[int, int], player: Player) -> int:
+        """Get the length of shortest path to goal row using BFS"""
+        goal_row = 0 if player == Player.PLAYER1 else self.state.board_size - 1
+        
+        visited = set()
+        queue = deque([(start, 0)])
+        visited.add(start)
+        
+        while queue:
+            current, dist = queue.popleft()
+            row, col = current
+            
+            if row == goal_row:
+                return dist
+            
+            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                new_row, new_col = row + dr, col + dc
+                
+                if not self.is_valid_position(new_row, new_col):
+                    continue
+                
+                if (new_row, new_col) in visited:
+                    continue
+                
+                if self.is_wall_between(current, (new_row, new_col)):
+                    continue
+                
+                visited.add((new_row, new_col))
+                queue.append(((new_row, new_col), dist + 1))
+        
+        return float('inf')
+    
+    def move_player(self, new_pos: Tuple[int, int]) -> bool:
+        """Move current player to new position"""
+        if new_pos not in self.get_valid_moves():
+            return False
+        
+        if self.state.current_player == Player.PLAYER1:
+            old_pos = self.state.player1_pos
+            self.state.player1_pos = new_pos
+        else:
+            old_pos = self.state.player2_pos
+            self.state.player2_pos = new_pos
+        
+        self.move_history.append(('move', self.state.current_player, old_pos, new_pos))
+        self._check_win()
+        self._switch_player()
+        
+        return True
+    
+    def place_wall(self, wall: Wall) -> bool:
+        """Place a wall on the board"""
+        if not self.can_place_wall(wall):
+            return False
+        
+        self.state.walls.add(wall)
+        
+        if self.state.current_player == Player.PLAYER1:
+            self.state.player1_walls -= 1
+        else:
+            self.state.player2_walls -= 1
+        
+        self.move_history.append(('wall', self.state.current_player, wall))
+        self._switch_player()
+        
+        return True
+    
+    def _check_win(self):
+        """Check if current player has won"""
+        if self.state.player1_pos[0] == 0:
+            self.state.game_over = True
+            self.state.winner = Player.PLAYER1
+        elif self.state.player2_pos[0] == self.state.board_size - 1:
+            self.state.game_over = True
+            self.state.winner = Player.PLAYER2
+    
+    def _switch_player(self):
+        """Switch to the other player"""
+        if self.state.current_player == Player.PLAYER1:
+            self.state.current_player = Player.PLAYER2
+        else:
+            self.state.current_player = Player.PLAYER1
+    
+    def get_all_valid_walls(self) -> List[Wall]:
+        """Get all valid wall placements for current player"""
+        valid_walls = []
+        
+        if self.state.get_current_player_walls() <= 0:
+            return valid_walls
+        
+        for row in range(self.state.board_size - 1):
+            for col in range(self.state.board_size - 1):
+                for orientation in WallOrientation:
+                    wall = Wall(row, col, orientation)
+                    if self.can_place_wall(wall):
+                        valid_walls.append(wall)
+        
+        return valid_walls
+    
+    def undo_move(self) -> bool:
+        """Undo the last move"""
+        if not self.move_history:
+            return False
+        
+        last_move = self.move_history.pop()
+        
+        if last_move[0] == 'move':
+            _, player, old_pos, new_pos = last_move
+            if player == Player.PLAYER1:
+                self.state.player1_pos = old_pos
+            else:
+                self.state.player2_pos = old_pos
+        else:  # wall
+            _, player, wall = last_move
+            self.state.walls.remove(wall)
+            if player == Player.PLAYER1:
+                self.state.player1_walls += 1
+            else:
+                self.state.player2_walls += 1
+        
+        self._switch_player()
+        self.state.game_over = False
+        self.state.winner = None
+        
+        return True
