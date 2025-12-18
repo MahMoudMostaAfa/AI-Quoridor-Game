@@ -125,6 +125,9 @@ quoridor_game/
 > Here are some preview images of the game in action:
 
 ### 🏠 Main Menu
+<p align="center">
+  <img src="imgs/1.png" alt="Main Menu" width="500">
+</p>
 ![Main Menu](imgs/1.png)
 
 ### 🎮 In-Game Board
