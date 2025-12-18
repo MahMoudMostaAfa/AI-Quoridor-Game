@@ -126,21 +126,28 @@ quoridor_game/
 
 ### 🏠 Main Menu
 <p align="center">
-  <img src="imgs/1.png" alt="Main Menu" width="800">
+  <img src="imgs/1.png" alt="Main Menu" width="600">
 </p>
-![Main Menu](imgs/1.png)
+
 
 ### 🎮 In-Game Board
-![In-Game](imgs/2.png)
-
+<p align="center">
+  <img src="imgs/2.png" alt="Game Board" width="600">
+</p
 ### 🚧 Wall Placement Preview
-![Wall Placement](imgs/4.png)
+<p align="center">
+  <img src="imgs/4.png" alt="Wall Placement" width="600">
+</p
 
 ### 🧠 AI vs Player
-![AI Gameplay](imgs/5.png)
+<p align="center">
+  <img src="imgs/5.png" alt="ai" width="600">
+</p
 
 ### 🏆 Victory Screen
-![Victory Screen](imgs/6.png)
+<p align="center">
+  <img src="imgs/6.png" alt="vic" width="600">
+</p
 
 ## 🔧 Technical Details
 
