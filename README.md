@@ -134,21 +134,25 @@ quoridor_game/
 <p align="center">
   <img src="imgs/2.png" alt="Game Board" width="600">
 </p
+
    
 ### 🚧 Wall Placement Preview
 <p align="center">
   <img src="imgs/4.png" alt="Wall Placement" width="600">
 </p
 
+
 ### 🧠 AI vs Player
 <p align="center">
   <img src="imgs/5.png" alt="ai" width="600">
 </p
 
+
 ### 🏆 Victory Screen
 <p align="center">
   <img src="imgs/6.png" alt="vic" width="600">
 </p
+
 
 ## 🔧 Technical Details
 
