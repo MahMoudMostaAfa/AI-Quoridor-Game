@@ -134,6 +134,7 @@ quoridor_game/
 <p align="center">
   <img src="imgs/2.png" alt="Game Board" width="600">
 </p
+   
 ### 🚧 Wall Placement Preview
 <p align="center">
   <img src="imgs/4.png" alt="Wall Placement" width="600">
