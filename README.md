@@ -126,7 +126,7 @@ quoridor_game/
 
 ### 🏠 Main Menu
 <p align="center">
-  <img src="imgs/1.png" alt="Main Menu" width="500">
+  <img src="imgs/1.png" alt="Main Menu" width="800">
 </p>
 ![Main Menu](imgs/1.png)
 
