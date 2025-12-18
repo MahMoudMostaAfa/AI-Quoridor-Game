@@ -120,6 +120,24 @@ quoridor_game/
 - ✅ **Game Over Overlay** - Animated victory screen with rematch option
 - ✅ **Multiple AI Difficulties** - Easy, Medium, and Hard modes
 - ✅ **Modular Architecture** - Clean separation of concerns for maintainability
+## 🖼️ Screenshots
+
+> Here are some preview images of the game in action:
+
+### 🏠 Main Menu
+![Main Menu](imgs/1.png)
+
+### 🎮 In-Game Board
+![In-Game](imgs/2.png)
+
+### 🚧 Wall Placement Preview
+![Wall Placement](imgs/4.png)
+
+### 🧠 AI vs Player
+![AI Gameplay](imgs/5.png)
+
+### 🏆 Victory Screen
+![Victory Screen](imgs/6.png)
 
 ## 🔧 Technical Details
 
